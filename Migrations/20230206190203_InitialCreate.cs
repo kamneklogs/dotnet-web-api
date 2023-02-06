@@ -14,7 +14,14 @@ namespace e07.Migrations
                 name: "Developers",
                 columns: table => new
                 {
-                    Email = table.Column<string>(type: "TEXT", nullable: false)
+                    Email = table.Column<string>(type: "TEXT", nullable: false),
+                    FirstName = table.Column<string>(type: "TEXT", nullable: true),
+                    LastName = table.Column<string>(type: "TEXT", nullable: true),
+                    FullName = table.Column<string>(type: "TEXT", nullable: true),
+                    Age = table.Column<int>(type: "INTEGER", nullable: false),
+                    WorkedHours = table.Column<int>(type: "INTEGER", nullable: false),
+                    SalaryByHours = table.Column<decimal>(type: "TEXT", nullable: false),
+                    DeveloperType = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {

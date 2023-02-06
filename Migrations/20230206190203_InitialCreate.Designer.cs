@@ -3,14 +3,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using e07.domain.repository;
+using e07.infrastructure;
 
 #nullable disable
 
 namespace e07.Migrations
 {
-    [DbContext(typeof(DeveloperDBContext))]
-    [Migration("20230203165059_InitialCreate")]
+    [DbContext(typeof(DbDataContext))]
+    [Migration("20230206190203_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -23,6 +23,27 @@ namespace e07.Migrations
                 {
                     b.Property<string>("Email")
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("Age")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("DeveloperType")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("FullName")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("SalaryByHours")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("WorkedHours")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Email");
 

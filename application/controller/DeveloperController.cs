@@ -13,14 +13,26 @@ public class DeveloperController : ControllerBase
 
     private readonly IUnitOfWork _unitOfWork;
 
-    public DeveloperController(ILogger<DeveloperController> logger)
+    public DeveloperController(ILogger<DeveloperController> logger, IUnitOfWork unitOfWork)
     {
         _logger = logger;
+        _unitOfWork = unitOfWork;
     }
 
     [HttpGet]
-    public  IEnumerable<Developer> Get()
+    public IEnumerable<Developer> Get()
     {
+        _logger.LogInformation(_unitOfWork.ToString());
         return _unitOfWork.DevelopersRepository.GetAll().Result;
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Post([FromBody] Developer developer) // Now we need to validate the model
+    {
+        _unitOfWork.DevelopersRepository.Add(developer);
+        await _unitOfWork.Complete();
+
+        _logger.LogInformation(developer.ToString());
+        return Ok();
     }
 }

@@ -1,7 +1,9 @@
 ﻿
 using e07.domain.repository;
 using e07.domain.unitofwork;
+using e07.infrastructure;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace e07;
@@ -14,6 +16,8 @@ internal class Program
 
         builder.Services.AddControllers();
         builder.Services.AddSwaggerGen();
+
+        builder.Services.AddScoped<DbContext, DbDataContext>();
 
         builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
         builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
