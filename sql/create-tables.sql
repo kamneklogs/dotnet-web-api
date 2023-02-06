@@ -1,12 +1,11 @@
-CREATE TABLE public.developer
-(
-    id integer NOT NULL GENERATED ALWAYS AS IDENTITY,
-    first_name character varying,
-    last_name character varying,
-    full_name character varying ,
-    age integer,
-    worked_hours integer,
-    developer_type_id integer,
-    email character varying,
-    PRIMARY KEY (id)
+CREATE TABLE "developer" (
+	"email"	TEXT NOT NULL,
+	"first_name"	TEXT NOT NULL,
+	"last_name"	TEXT NOT NULL,
+	"full_name"	REAL NOT NULL,
+	"age"	INTEGER NOT NULL,
+	"worked_hour"	INTEGER,
+	"salary_by_hours"	INTEGER NOT NULL,
+	"developer_type_id"	INTEGER NOT NULL,
+	PRIMARY KEY("email")
 );

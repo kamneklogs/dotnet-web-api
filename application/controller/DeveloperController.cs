@@ -1,3 +1,5 @@
+using e07.domain.model;
+using e07.domain.unitofwork;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -9,14 +11,16 @@ public class DeveloperController : ControllerBase
 
     private readonly ILogger<DeveloperController> _logger;
 
+    private readonly IUnitOfWork _unitOfWork;
+
     public DeveloperController(ILogger<DeveloperController> logger)
     {
         _logger = logger;
     }
 
     [HttpGet]
-    public IEnumerable<string> Get()
+    public  IEnumerable<Developer> Get()
     {
-        yield return "list of developers";
+        return _unitOfWork.DevelopersRepository.GetAll().Result;
     }
 }

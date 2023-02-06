@@ -1,4 +1,6 @@
 ﻿
+using e07.domain.repository;
+using e07.domain.unitofwork;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -12,6 +14,9 @@ internal class Program
 
         builder.Services.AddControllers();
         builder.Services.AddSwaggerGen();
+
+        builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+        builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
         var app = builder.Build();
 
