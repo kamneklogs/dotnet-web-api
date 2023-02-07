@@ -17,4 +17,9 @@ public class DbDataContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder options)
         => options.UseSqlite($"Data Source={DbPath}");
+
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        builder.Entity<Developer>().HasKey(d => d.Email);
+    }
 }
