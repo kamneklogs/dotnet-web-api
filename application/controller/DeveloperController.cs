@@ -15,7 +15,7 @@ public class DeveloperController : ControllerBase
 
     private readonly ILogger<DeveloperController> _logger;
 
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IUnitOfWork _unitOfWork; // If is necessary, move this related logic to the service layer
 
     private readonly IMapper _mapper;
 
@@ -93,4 +93,5 @@ public class DeveloperController : ControllerBase
         return developers;
     }
 
+    //Delete and update methods are not implemented yet. TODO
 }
