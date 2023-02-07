@@ -25,7 +25,7 @@ internal class Program
 
         builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
         builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-        builder.Services.AddScoped<IValidator<DeveloperDTO>, DeveloperDTOValidator>();
+        builder.Services.AddScoped<IValidator<DeveloperCreationDTO>, DeveloperCreationDTOValidator>();
 
         builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

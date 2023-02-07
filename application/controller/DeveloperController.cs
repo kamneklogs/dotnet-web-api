@@ -19,9 +19,9 @@ public class DeveloperController : ControllerBase
 
     private readonly IMapper _mapper;
 
-    private readonly IValidator<DeveloperDTO> _validator;
+    private readonly IValidator<DeveloperCreationDTO> _validator;
 
-    public DeveloperController(ILogger<DeveloperController> logger, IUnitOfWork unitOfWork, IMapper mapper, IValidator<DeveloperDTO> validator)
+    public DeveloperController(ILogger<DeveloperController> logger, IUnitOfWork unitOfWork, IMapper mapper, IValidator<DeveloperCreationDTO> validator)
     {
         _logger = logger;
         _unitOfWork = unitOfWork;
@@ -42,7 +42,7 @@ public class DeveloperController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Post([FromBody] DeveloperDTO developerDTO) // Now we need to validate the model
+    public async Task<IActionResult> Post([FromBody] DeveloperCreationDTO developerDTO) // Now we need to validate the model
     {
         var validationResult = _validator.Validate(developerDTO);
 

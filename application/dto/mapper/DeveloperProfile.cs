@@ -7,7 +7,7 @@ public class DeveloperProfile : Profile
 {
     public DeveloperProfile()
     {
-        CreateMap<DeveloperDTO, Developer>()
+        CreateMap<DeveloperCreationDTO, Developer>()
             .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => $"{src.FirstName} {src.LastName}"))
             .ForMember(dest => dest.DeveloperType, opt => opt.MapFrom(src => DeveloperTypeExtensions.FromId(src.DeveloperTypeId)));
     }
