@@ -1,7 +1,11 @@
 ﻿
+using e07.application.dto;
+using e07.application.dto.validator;
 using e07.domain.repository;
 using e07.domain.unitofwork;
 using e07.infrastructure;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,6 +25,7 @@ internal class Program
 
         builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
         builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+        builder.Services.AddScoped<IValidator<DeveloperDTO>, DeveloperDTOValidator>();
 
         builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
