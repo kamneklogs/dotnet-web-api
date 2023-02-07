@@ -1,6 +1,7 @@
 ﻿
 using e07.application.dto;
 using e07.application.dto.validator;
+using e07.application.service;
 using e07.domain.repository;
 using e07.domain.unitofwork;
 using e07.infrastructure;
@@ -25,7 +26,8 @@ internal class Program
 
         builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
         builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-        builder.Services.AddScoped<IValidator<DeveloperCreationDTO>, DeveloperCreationDTOValidator>();
+        builder.Services.AddScoped<IValidator<DeveloperModificationDTO>, DeveloperModificationDTOValidator>();
+        builder.Services.AddScoped<IDeveloperService, DeveloperService>();
 
         builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

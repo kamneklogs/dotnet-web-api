@@ -1,7 +1,7 @@
 using AutoMapper;
 using e07.application.dto;
+using e07.application.service;
 using e07.domain.model;
-using e07.domain.unitofwork;
 using e07.util.extensions;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
@@ -15,34 +15,33 @@ public class DeveloperController : ControllerBase
 
     private readonly ILogger<DeveloperController> _logger;
 
-    private readonly IUnitOfWork _unitOfWork; // If is necessary, move this related logic to the service layer
-
     private readonly IMapper _mapper;
 
-    private readonly IValidator<DeveloperCreationDTO> _validator;
+    private readonly IValidator<DeveloperModificationDTO> _validator;
 
-    public DeveloperController(ILogger<DeveloperController> logger, IUnitOfWork unitOfWork, IMapper mapper, IValidator<DeveloperCreationDTO> validator)
+    private readonly IDeveloperService _developerService;
+    public DeveloperController(ILogger<DeveloperController> logger, IMapper mapper, IValidator<DeveloperModificationDTO> validator, IDeveloperService developerService)
     {
         _logger = logger;
-        _unitOfWork = unitOfWork;
         _mapper = mapper;
         _validator = validator;
+        _developerService = developerService;
     }
 
     [HttpGet]
     public IEnumerable<Developer> Get()
     {
-        return _unitOfWork.DevelopersRepository.GetAll().Result;
+        return _developerService.GetAllAsync().Result;
     }
 
-    [HttpGet("{id}")]
-    public Developer Get(string id)
+    [HttpGet("{email}")]
+    public Developer Get(string email)
     {
-        return _unitOfWork.DevelopersRepository.Find(d => d.Email == id).Result;
+        return _developerService.FindByEmailAsync(email).Result;
     }
 
     [HttpPost]
-    public async Task<IActionResult> Post([FromBody] DeveloperCreationDTO developerDTO) // Now we need to validate the model
+    public async Task<IActionResult> Post([FromBody] DeveloperModificationDTO developerDTO) // Now we need to validate the model
     {
         var validationResult = _validator.Validate(developerDTO);
 
@@ -53,8 +52,7 @@ public class DeveloperController : ControllerBase
 
         Developer developer = _mapper.Map<Developer>(developerDTO);
 
-        _unitOfWork.DevelopersRepository.Add(developer);
-        await _unitOfWork.Complete();
+        await _developerService.CreateAsync(developer);
 
         return CreatedAtAction(nameof(Get), new { id = developer.Email }, developer);
     }
@@ -68,30 +66,45 @@ public class DeveloperController : ControllerBase
         [FromQuery] int? age,
         [FromQuery] int? workedHours)
     {
-        var developers = _unitOfWork.DevelopersRepository.GetAll().Result;
-
-        if (!string.IsNullOrEmpty(name))
-        {
-            developers = developers.Where(d => d.FullName.ContainsCaseInsensitive(name)); // Extension method
-        }
-
-        if (developerType.HasValue)
-        {
-            developers = developers.Where(d => d.DeveloperType == DeveloperTypeExtensions.FromId(developerType.Value));
-        }
-
-        if (age.HasValue)
-        {
-            developers = developers.Where(d => d.Age == age.Value);
-        }
-
-        if (workedHours.HasValue)
-        {
-            developers = developers.Where(d => d.WorkedHours == workedHours.Value);
-        }
-
-        return developers;
+        return _developerService.SearchByCriteriaAsync(name, developerType, age, workedHours).Result;
     }
 
-    //Delete and update methods are not implemented yet. TODO
+    [HttpDelete("{email}")]
+    public async Task<IActionResult> Delete(string email)
+    {
+        var developer = await _developerService.FindByEmailAsync(email);
+
+        if (developer == null)
+        {
+            return NotFound();
+        }
+
+        await _developerService.DeleteAsync(email);
+
+        return NoContent();
+    }
+
+    [HttpPut("{email}")]
+    public async Task<IActionResult> Put(string email, [FromBody] DeveloperModificationDTO developerDTO)
+    {
+        var validationResult = _validator.Validate(developerDTO);
+
+        if (!validationResult.IsValid)
+        {
+            return BadRequest(validationResult.Errors);
+        }
+
+        var developer = _developerService.FindByEmailAsync(email).Result;
+
+        if (developer == null)
+        {
+            return NotFound();
+        }
+
+        developer = _mapper.Map(developerDTO, developer);
+
+        await _developerService.UpdateAsync(developer);
+
+        return NoContent();
+    }
 }

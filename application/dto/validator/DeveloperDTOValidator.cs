@@ -2,9 +2,9 @@ using FluentValidation;
 
 namespace e07.application.dto.validator;
 
-public class DeveloperCreationDTOValidator : AbstractValidator<DeveloperCreationDTO>  // https://docs.fluentvalidation.net/en/latest/aspnet.html#asp-net-core
+public class DeveloperModificationDTOValidator : AbstractValidator<DeveloperModificationDTO>  // https://docs.fluentvalidation.net/en/latest/aspnet.html#asp-net-core
 {
-    public DeveloperCreationDTOValidator()
+    public DeveloperModificationDTOValidator()
     {
 
         RuleFor(d => d.Email)
